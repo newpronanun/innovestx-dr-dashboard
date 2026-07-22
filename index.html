@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnovestX DR Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-background"></div>
+    <header class="topbar glass">
+        <div class="topbar-left" style="display:flex; align-items:center; gap: 2rem;">
+            <div style="cursor: pointer; display: flex; align-items: center;">
+                <img src="innovestx_logo.png" alt="InnovestX" style="height: 65px; object-fit: contain;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button id="sidebar-toggle" class="topbar-btn" title="Toggle Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <button id="nav-back-layer" class="topbar-btn" style="opacity: 0.5;" title="Go Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button id="nav-home" class="topbar-btn" title="Home">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                </button>
+            </div>
+        </div>
+        <div id="logo-home" class="logo" style="display: none;">
+        </div>
+        <div class="topbar-right" style="display:flex; align-items:center;">
+            <div style="display: flex; align-items: center;">
+                <img src="dr23_logo_v2.png" alt="DR23" style="height: 55px; object-fit: contain;">
+            </div>
+            <!-- Hidden counter for JS -->
+            <div id="total-count" style="display: none;">0</div>
+        </div>
+    </header>
+    
+    <div class="market-ticker" style="overflow: hidden; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; padding: 4px 0; display: flex; align-items: center; z-index: 50; width: 100%;">
+        <div class="ticker-scroll" style="display: flex; animation: ticker 360s linear infinite; width: max-content; color: var(--text-secondary); font-size: 0.85rem;">
+            <div id="ticker-content-container" style="display: flex; gap: 3rem; padding-right: 3rem;">
+                <!-- JS will inject here -->
+                <span><strong style="color: white;">Loading...</strong></span>
+            </div>
+            <div id="ticker-content-clone" style="display: flex; gap: 3rem; padding-right: 3rem;">
+                <!-- JS will inject identical content here -->
+                <span><strong style="color: white;">Loading...</strong></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-layout">
+        <aside class="sidebar glass">
+            <h2>Filters</h2>
+            
+            <div class="filter-group">
+                <label for="search">Search</label>
+                <input type="text" id="search" class="glass-input" placeholder="Search DR Name or Underlying...">
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter-country">Country</label>
+                <select id="filter-country" class="glass-input">
+                    <option value="All">All Countries</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-risk-level">Risk Level</label>
+                <select id="filter-risk-level" class="glass-input">
+                    <option value="All">All Levels</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-risk-label">Risk Label</label>
+                <select id="filter-risk-label" class="glass-input">
+                    <option value="All">All Labels</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-sector">Sector</label>
+                <select id="filter-sector" class="glass-input">
+                    <option value="All">All Sectors</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-industry">Industry</label>
+                <select id="filter-industry" class="glass-input">
+                    <option value="All">All Industries</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-market-cap">Market Cap Tier</label>
+                <select id="filter-market-cap" class="glass-input">
+                    <option value="All">All Tiers</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="filter-ai-chain">AI Chain</label>
+                <select id="filter-ai-chain" class="glass-input">
+                    <option value="All">All AI Chains</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter-group-list">Stock Group</label>
+                <select id="filter-group-list" class="glass-input">
+                    <option value="All">All Groups</option>
+                </select>
+            </div>
+
+            <button id="reset-filters" class="btn-primary">Reset Filters</button>
+        </aside>
+        
+        <main class="main-content" style="position: relative; padding-top: 0;">
+
+            <div class="hero-title-area" style="text-align: center; margin-top: 2rem; margin-bottom: 2.5rem; position: relative; z-index: 10;">
+                <h1 style="font-family: 'Inter', sans-serif; font-size: 3.5rem; font-weight: 800; letter-spacing: -1.5px; margin: 0; background: linear-gradient(180deg, #FFFFFF 0%, #B0B0B0 40%, #707070 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));">InnovestX Global DRs</h1>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; letter-spacing: 1px;">Discover, Analyze, and Trade Top-Tier Depository Receipts</p>
+            </div>
+
+            <!-- Hero Dashboard Section (Only visible on default) -->
+            <div id="hero-section" class="hero-section">
+                <div class="hero-content">
+                    <div class="carousel-container" style="display: flex; align-items: center; gap: 1rem; width: 100%; position: relative; margin-bottom: 2rem;">
+                        <button id="carousel-left" class="topbar-btn" style="flex-shrink: 0; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        
+                        <div id="new-drs-carousel" class="new-drs-carousel" style="flex-grow: 1; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;"></div>
+                        
+                        <button id="carousel-right" class="topbar-btn" style="flex-shrink: 0; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="hero-search-wrapper">
+                        <svg class="hero-search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="hero-search" class="hero-search-input" placeholder="Search for a DR or Underlying stock..." autocomplete="off">
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <div id="filter-criteria" class="filter-criteria hidden"></div>
+            
+            <div id="grouped-view" class="grouped-container">
+                <!-- Grouped view by country injected here -->
+            </div>
+
+            <div class="grid-container hidden" id="card-grid">
+                <!-- Cards will be injected here via JS -->
+            </div>
+            <div id="no-results" class="no-results hidden">
+                <p>No DR products match your selected filters.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detailed DR Modal -->
+    <div id="dr-modal" class="modal-overlay hidden">
+        <div class="modal-content glass widescreen-modal">
+            <button id="modal-close" class="modal-close">&times;</button>
+            
+            <div class="modal-layout">
+                <!-- Left Panel: Info & Data -->
+                <div class="modal-left">
+                    <div class="modal-header">
+                        <h2 id="modal-dr-name">DR Name</h2>
+                        <p id="modal-underlying-name" class="modal-subtitle">Underlying Name</p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h3>Categorizations</h3>
+                        <div id="modal-categorization-grid" class="categorization-list">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Chart -->
+                <div class="modal-right">
+                    <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-right: 60px;">
+                        <h3>Live Performance <span id="chart-currency-label" style="font-size: 0.8em; color: rgba(255,255,255,0.5); font-weight: normal; margin-left: 5px;"></span></h3>
+                        <div class="chart-toggles" style="display: flex; gap: 8px; align-items: center;">
+                            <label style="display: flex; align-items: center; gap: 4px; color: white; font-size: 12px; cursor: pointer;">
+                                <input type="checkbox" id="toggle-underlying" checked style="cursor: pointer;"> Underlying
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px; color: white; font-size: 12px; cursor: pointer; margin-right: 4px;">
+                                <input type="checkbox" id="toggle-dr" checked style="cursor: pointer;"> DR
+                            </label>
+                            <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 2px 2px; height: 16px;"></div>
+                            <button id="chart-btn-1d" class="chart-toggle-btn active" style="background: rgba(133, 90, 255, 0.2); border: 1px solid rgba(133, 90, 255, 0.5); color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;">1D</button>
+                            <button id="chart-btn-1w" class="chart-toggle-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;">1W</button>
+                            <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 2px 2px;"></div>
+                            <button id="chart-btn-candle" class="chart-toggle-btn active" style="background: rgba(133, 90, 255, 0.2); border: 1px solid rgba(133, 90, 255, 0.5); color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;">Candle</button>
+                            <button id="chart-btn-line" class="chart-toggle-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;">Line</button>
+                        </div>
+                    </div>
+                    <div id="tv-chart-container" class="tv-chart-container" style="position: relative;">
+                        <!-- TradingView widget goes here -->
+                        <div id="perf-indicator" style="position: absolute; top: 75px; left: 70px; z-index: 10; display: grid; grid-template-columns: repeat(3, 55px); gap: 3px; pointer-events: none;">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="../historical_chart_data.js"></script>
+    <script src="../fx_chart_data.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
